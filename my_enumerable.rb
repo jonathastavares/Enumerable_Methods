@@ -15,6 +15,7 @@ module Enumerable
       yield(self, index)
     end
   end
+  self
 end
 
-[1, 2, 3, 4].my_each_with_index { |x,y| print y }
+[1, 2, 3, 4].my_each_with_index { |x, y| print y }
