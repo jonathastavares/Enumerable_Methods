@@ -7,6 +7,14 @@ module Enumerable
     end
     self
   end
+
+  def my_each_with_index
+    return to_enum(_method_) unless block_given?
+
+    for index in self
+      yield(self, index)
+    end
+  end
 end
 
-[1, 2, 3, 4].my_each{ |x| print x }
+[1, 2, 3, 4].my_each_with_index { |x,y| print y }
