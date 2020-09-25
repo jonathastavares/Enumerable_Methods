@@ -58,6 +58,14 @@ module Enumerable
 
     length
   end
+
+  def my_map
+    return to_enum(_method_) unless block_given?
+
+    array = []
+    my_each { |x| array << yield(x) }
+    array
+  end
 end
 
-print [1, 2, 3, 4].my_count { |x| x > 1 }
+print [1, 2, 3, 4].my_map { 'cat' }
