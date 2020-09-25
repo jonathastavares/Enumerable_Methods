@@ -26,6 +26,13 @@ module Enumerable
     my_each { |x| array << x if yield(x) }
     array
   end
+
+  def my_all?
+    return to_enum(_method_) unless block_given?
+
+    array = my_select { |x| !yield(x) }
+    array.empty?
+  end
 end
 
-print [1, 2, 3, 4].my_select { |x| x > 1 }
+print [1, 2, 3, 4].my_all? { |x| x > 1 }
