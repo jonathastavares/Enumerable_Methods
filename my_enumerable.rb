@@ -75,7 +75,8 @@ module Enumerable
     if !number.nil? && operator.nil?
       operator = number
       number = nil
-    elsif !block_given? && !operator.nil?
+      to_a.my_each { |item| number = number.nil? ? item : number.send(operator, item) }
+    elsif !operator.nil?
       to_a.my_each { |item| number = number.nil? ? item : number.send(operator, item) }
     else
       to_a.my_each { |item| number = number.nil? ? item : yield(number, item) }
@@ -87,3 +88,5 @@ module Enumerable
     array.my_inject { |result, item| result * item }
   end
 end
+
+print [1, 2, 3, 4, 5].my_inject(2, :*)
