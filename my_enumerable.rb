@@ -72,7 +72,7 @@ module Enumerable
   end
 
   def my_inject(number = nil, operator = nil)
-    if !number.nil? && operator.nil?
+    if !number.nil?
       operator = number
       number = nil
       to_a.my_each { |item| number = number.nil? ? item : number.send(operator, item) }
@@ -89,4 +89,4 @@ module Enumerable
   end
 end
 
-print [1, 2, 3, 4, 5].my_inject(2, :*)
+print [1, 2, 3, 4, 5].my_inject(:-)
