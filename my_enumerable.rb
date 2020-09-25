@@ -18,6 +18,14 @@ module Enumerable
       i += 1
     end
   end
+
+  def my_select
+    return to_enum(_method_) unless block_given?
+
+    array = []
+    my_each { |x| array << x if yield(x) }
+    array
+  end
 end
 
-[1, 2, 3, 4].my_each_with_index { |x, y| print y  }
+print [1, 2, 3, 4].my_select { |x| x > 1 }
