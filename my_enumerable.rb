@@ -68,44 +68,20 @@ module Enumerable
   end
 
   def my_inject(number = nil, operator = nil)
-    if !block_given? && number != nil && operator != nil
-      operator = operator.to_s
-      operator = ':' + operator
-      if operator == ':+'
-        result = 0
-        my_each { |x| result += x }
-        result += number
-        result
-      elsif operator == ':*'
-        result = 1
-        my_each { |x| result *= x }
-        result *= number
-        result
-      end
-    elsif !block_given? && number != nil && operator == nil
-      number = number.to_s
-      number = ':' + number
-      if number == ':+'
-        result = 0
-        my_each { |x| result += x }
-        result
-      elsif number == ':*'
-        result = 1
-        my_each { |x| result *= x }
-        result
-      end
-    elsif block_given? && number == nil && operator == nil
-      if
-        result = 0
-        my_each { |x| result = yield(result, x) }
-        result
-      elsif
-        result = 1
-        my_each { |x| result = yield(result, x) }
-        result
-      end
+    if !number.nil? && operator.nil?
+      operator = number
+      number = nil
+    elsif !block_given? && !operator.nil?
+      to_a.my_each { |item| number = number.nil? ? item : number.send(operator, item) }
+    else
+      to_a.my_each { |item| number = number.nil? ? item : yield(number, item) }
     end
+    number
+  end
+
+  def multiply_els(array)
+    array.my_inject { |result, item| result * item }
   end
 end
 
-print [1, 2, 3, 4].my_inject { |sum, n| sum * n }
+print [1, 2, 3, 4].inject { |sum, n| sum * n }
