@@ -45,6 +45,19 @@ module Enumerable
 
     !my_any? { |x| yield(x) }
   end
+
+  def my_count(argument = nil)
+    if argument
+      count = my_select { |x| x == argument }
+      return count.length
+
+    elsif block_given?
+      count = my_select { |x| yield(x) }
+      return count.length
+    end
+
+    length
+  end
 end
 
-print [1, 2, 3, 4].my_none? { |x| x < 1 }
+print [1, 2, 3, 4].my_count { |x| x > 1 }
