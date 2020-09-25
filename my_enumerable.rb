@@ -39,6 +39,12 @@ module Enumerable
 
     !my_all? { |x| !yield(x) }
   end
+
+  def my_none?
+    return to_enum(_method_) unless block_given?
+
+    !my_any? { |x| yield(x) }
+  end
 end
 
-print [1, 2, 3, 4].my_any? { |x| x > 1 }
+print [1, 2, 3, 4].my_none? { |x| x < 1 }
