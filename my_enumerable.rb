@@ -59,11 +59,15 @@ module Enumerable
     length
   end
 
-  def my_map
+  def my_map(proc = nil)
     return to_enum(_method_) unless block_given?
 
     array = []
-    my_each { |x| array << yield(x) }
+    if proc
+      my_each { |x| array << procedure.call(x) }
+    else
+      my_each { |x| array << yield(x) }
+    end
     array
   end
 
@@ -83,5 +87,3 @@ module Enumerable
     array.my_inject { |result, item| result * item }
   end
 end
-
-print [1, 2, 3, 4].inject { |sum, n| sum * n }
