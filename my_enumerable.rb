@@ -33,6 +33,12 @@ module Enumerable
     array = my_select { |x| !yield(x) }
     array.empty?
   end
+
+  def my_any?
+    return to_enum(_method_) unless block_given?
+
+    !my_all? { |x| !yield(x) }
+  end
 end
 
-print [1, 2, 3, 4].my_all? { |x| x > 1 }
+print [1, 2, 3, 4].my_any? { |x| x > 1 }
