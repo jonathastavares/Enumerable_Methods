@@ -2,10 +2,11 @@ module Enumerable
   def my_each
     return to_enum(_method_) unless block_given?
 
-    for item in self
-      yield(item)
+    i = 0
+    until i == length
+      yield(self[i])
+      i += 1
     end
-    self
   end
 
   def my_each_with_index
@@ -18,4 +19,4 @@ module Enumerable
   self
 end
 
-[1, 2, 3, 4].my_each_with_index { |x, y| print y }
+[1, 2, 3, 4].my_each { |x| print x  }
