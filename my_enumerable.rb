@@ -107,7 +107,6 @@ module Enumerable
   end
 end
 
-<<<<<<< HEAD
 array = %w[c d c c]
 print array.each
 print "\n"
@@ -126,6 +125,3 @@ print "\n"
 print array.my_select
 print "\n"
 print array.my_all?(String)
-=======
-print [1, 2, 3, 4, 5].my_inject(:-)
->>>>>>> 993dd83878a8c620c9b7b5f06ca4ddfca4089a58
