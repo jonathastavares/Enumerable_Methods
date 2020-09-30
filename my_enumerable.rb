@@ -1,12 +1,14 @@
 module Enumerable
   def my_each
-    return to_enum(_method_) unless block_given?
+    return to_enum unless block_given?
 
+    array = to_a
     i = 0
-    until i == length
-      yield(self[i])
+    until i == array.length
+      yield(array[i])
       i += 1
     end
+    array
   end
 
   def my_each_with_index
@@ -41,4 +43,10 @@ module Enumerable
   end
 end
 
-print [1, 2, 3, 4].my_any? { |x| x > 1 }
+a = [1, 2, 3, 4, 5]
+a = a.my_each
+print a.next
+print "\n"
+b = a.my_each { |x| print x }
+print "\n"
+print b
