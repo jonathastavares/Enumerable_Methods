@@ -1,6 +1,6 @@
 module Enumerable
   def my_each
-    return to_enum unless block_given?
+    return to_enum(__method__) unless block_given?
 
     array = to_a
     i = 0
@@ -12,7 +12,7 @@ module Enumerable
   end
 
   def my_each_with_index
-    return to_enum unless block_given?
+    return to_enum(__method__) unless block_given?
 
     array = to_a
     i = 0
@@ -24,7 +24,7 @@ module Enumerable
   end
 
   def my_select
-    return to_enum(_method_) unless block_given?
+    return to_enum(__method__) unless block_given?
 
     array = []
     my_each { |x| array << x if yield(x) }
@@ -55,3 +55,7 @@ print c
 print "\n"
 range = (1...13)
 range.my_each_with_index { |x, y| print "[#{y},#{x}]" }
+d=a.my_select
+print "\n"
+print d.next
+print d.next
