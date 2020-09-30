@@ -33,12 +33,6 @@ module Enumerable
 
   def my_all?(type = nil)
     origin = to_a
-    checker = origin.my_select { |x| x == type.to_s[7] } if type.to_s.include? '?-mix'
-
-    checker = origin.my_select { |x| x.instance_of? type }
-    return false if checker.length != origin.length
-
-    return true if checker.length == origin.length
 
     return true if origin.empty?
 
@@ -48,6 +42,12 @@ module Enumerable
 
     array = my_select { |x| yield(x) }
     return false if array.length < origin.length
+
+    checker = origin.my_select { |x| x == type.to_s[7] } if type.to_s.include? '?-mix'
+
+    checker = origin.my_select { |x| x.instance_of? type }
+
+    return false if checker.length != origin.length
 
     true
   end
@@ -107,7 +107,7 @@ module Enumerable
   end
 end
 
-array = %w[c d c c]
+array = [1, 2, 3, 4, 5]
 print array.each
 print "\n"
 print array.each_with_index
