@@ -31,11 +31,25 @@ module Enumerable
     array
   end
 
-  def my_all?
-    return to_enum(_method_) unless block_given?
+  def my_all?(type = nil)
+    origin = to_a
+    checker = origin.my_select { |x| x == type.to_s[7] } if type.to_s.include? '?-mix'
 
-    array = my_select { |x| !yield(x) }
-    array.empty?
+    checker = origin.my_select { |x| x.instance_of? type }
+    return false if checker.length != origin.length
+
+    return true if checker.length == origin.length
+
+    return true if origin.empty?
+
+    return false if origin.include?(false) || origin.include?(nil)
+
+    return true unless block_given?
+
+    array = my_select { |x| yield(x) }
+    return false if array.length < origin.length
+
+    true
   end
 
   def my_any?
@@ -43,19 +57,71 @@ module Enumerable
 
     !my_all? { |x| !yield(x) }
   end
+
+  def my_none?
+    return to_enum(_method_) unless block_given?
+
+    !my_any? { |x| yield(x) }
+  end
+
+  def my_count(argument = nil)
+    if argument
+      count = my_select { |x| x == argument }
+      return count.length
+
+    elsif block_given?
+      count = my_select { |x| yield(x) }
+      return count.length
+    end
+
+    length
+  end
+
+  def my_map(proc = nil)
+    return to_enum(_method_) unless block_given?
+
+    array = []
+    if proc
+      my_each { |x| array << procedure.call(x) }
+    else
+      my_each { |x| array << yield(x) }
+    end
+    array
+  end
+
+  def my_inject(number = nil, operator = nil)
+    if !number.nil?
+      operator = number
+      number = nil
+      to_a.my_each { |item| number = number.nil? ? item : number.send(operator, item) }
+    elsif !operator.nil?
+      to_a.my_each { |item| number = number.nil? ? item : number.send(operator, item) }
+    else
+      to_a.my_each { |item| number = number.nil? ? item : yield(number, item) }
+    end
+    number
+  end
+
+  def multiply_els(array)
+    array.my_inject { |result, item| result * item }
+  end
 end
 
-a = [1, 2, 3, 4, 5]
-b = a.my_each_with_index
-print b.next
+array = %w[c d c c]
+print array.each
 print "\n"
-c = a.my_each_with_index { |x, y| print "[#{y},#{x}]" }
+print array.each_with_index
 print "\n"
-print c
+print array.select
 print "\n"
-range = (1...13)
-range.my_each_with_index { |x, y| print "[#{y},#{x}]" }
-d=a.my_select
+print array.all?(String)
 print "\n"
-print d.next
-print d.next
+print "\n"
+print "\n"
+print array.my_each
+print "\n"
+print array.my_each_with_index
+print "\n"
+print array.my_select
+print "\n"
+print array.my_all?(String)
