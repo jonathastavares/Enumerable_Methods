@@ -108,14 +108,16 @@ module Enumerable
     length
   end
 
-  def my_map(proc = nil)
-    return to_enum(_method_) unless block_given?
+  def my_map(my_proc = nil)
+    return to_enum(__method__) unless block_given?
 
+    origin = to_a
     array = []
-    if proc
-      my_each { |x| array << procedure.call(x) }
+    if my_proc
+      origin.my_each { |x| array << my_proc.call(x) }
+      return array
     else
-      my_each { |x| array << yield(x) }
+      origin.my_each { |x| array << yield(x) }
     end
     array
   end
