@@ -92,8 +92,6 @@ module Enumerable
     my_any?(*type) { |x| !yield(x) }
   end
 
-  # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/ModuleLength
-
   def my_count(argument = nil)
     origin = to_a
     if argument
@@ -122,15 +120,37 @@ module Enumerable
     array
   end
 
-  def my_inject(number = nil, operator = nil)
-    if !number.nil?
-      operator = number
-      number = nil
-      to_a.my_each { |item| number = number.nil? ? item : number.send(operator, item) }
-    elsif !operator.nil?
-      to_a.my_each { |item| number = number.nil? ? item : number.send(operator, item) }
-    else
-      to_a.my_each { |item| number = number.nil? ? item : yield(number, item) }
+  def my_inject(*arg)
+    origin = to_a
+    if !block_given? && arg.length == 1 && origin != []
+      number = origin[0]
+      origin.my_each do |item|
+        number = number.send(arg[0], item)
+      end
+      return number
+    end
+
+    if !block_given? && arg.length == 2 && origin != []
+      number = arg[0]
+      origin.my_each do |item|
+        number = number.send(arg[1], item)
+      end
+      return number
+    end
+
+    if block_given? && arg.length == 1 && origin != []
+      number = arg[0]
+      origin.my_each do |item|
+        number = yield(number, item)
+      end
+      return number
+    end
+
+    if block_given? && arg.length.zero? && origin != []
+      number = origin[0]
+      origin.my_each do |item|
+        number = yield(number, item)
+      end
     end
     number
   end
@@ -139,3 +159,4 @@ module Enumerable
     array.my_inject { |result, item| result * item }
   end
 end
+# rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/ModuleLength
