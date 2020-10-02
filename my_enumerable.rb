@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/ModuleLength
 module Enumerable
   def my_each
     return to_enum(__method__) unless block_given?
@@ -31,7 +32,6 @@ module Enumerable
     array
   end
 
-  # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
   def my_all?(*type)
     origin = to_a
     return true if origin == []
@@ -73,13 +73,26 @@ module Enumerable
     false
   end
 
-  # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+  def my_none?(*type)
+    origin = to_a
+    return true if origin == []
 
-  def my_none?
-    return to_enum(_method_) unless block_given?
+    if !block_given? and type.length.zero?
+      return true if origin.include?(nil) || origin.include?(false)
 
-    !my_any? { |x| yield(x) }
+      return false
+    end
+
+    if type.length == 1
+      checker = origin.my_select { |x| x =~ type[0] } if type[0].instance_of?(Regexp)
+      checker = origin.my_select { |x| x.is_a?(type[0]) } unless type[0].instance_of?(Regexp)
+      checker.empty? ? (return true) : (return false)
+    end
+
+    my_any?(*type) { |x| !yield(x) }
   end
+
+  # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/ModuleLength
 
   def my_count(argument = nil)
     if argument
