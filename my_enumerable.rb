@@ -31,26 +31,29 @@ module Enumerable
     array
   end
 
-  def my_all?(type = nil)
+  # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+  def my_all?(*type)
     origin = to_a
+    return true if origin == []
 
-    return true if origin.empty?
+    if !block_given? && type.length.zero?
+      return false if origin.include?(false) || origin.include?(nil)
 
-    return false if origin.include?(false) || origin.include?(nil)
+      return true
+    end
 
-    return true unless block_given?
+    if type.length == 1
+      checker = origin.my_select { |x| x =~ type[0] } if type[0].instance_of?(Regexp)
+      checker = origin.my_select { |x| x.is_a?(type[0]) } unless type[0].instance_of?(Regexp)
 
-    array = my_select { |x| yield(x) }
-    return false if array.length < origin.length
+      checker.length < origin.length ? (return false) : (return true)
+    end
 
-    checker = origin.my_select { |x| x == type.to_s[7] } if type.to_s.include? '?-mix'
-
-    checker = origin.my_select { |x| x.instance_of? type }
-
-    return false if checker.length != origin.length
-
-    true
+    checker = my_select { |x| yield(x) } if block_given? && type.length.zero?
+    checker.length < origin.length ? (return false) : (return true)
   end
+
+  # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
   def my_any?
     return to_enum(_method_) unless block_given?
@@ -106,22 +109,3 @@ module Enumerable
     array.my_inject { |result, item| result * item }
   end
 end
-
-array = [1, 2, 3, 4, 5]
-print array.each
-print "\n"
-print array.each_with_index
-print "\n"
-print array.select
-print "\n"
-print array.all?(String)
-print "\n"
-print "\n"
-print "\n"
-print array.my_each
-print "\n"
-print array.my_each_with_index
-print "\n"
-print array.my_select
-print "\n"
-print array.my_all?(String)
