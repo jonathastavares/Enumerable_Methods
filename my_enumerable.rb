@@ -95,12 +95,13 @@ module Enumerable
   # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/ModuleLength
 
   def my_count(argument = nil)
+    origin = to_a
     if argument
-      count = my_select { |x| x == argument }
+      count = origin.my_select { |x| x == argument }
       return count.length
 
     elsif block_given?
-      count = my_select { |x| yield(x) }
+      count = origin.my_select { |x| yield(x) }
       return count.length
     end
 
