@@ -53,13 +53,27 @@ module Enumerable
     checker.length < origin.length ? (return false) : (return true)
   end
 
-  # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+  def my_any?(*type)
+    origin = to_a
+    return false if origin == []
 
-  def my_any?
-    return to_enum(_method_) unless block_given?
+    if !block_given? and type.length.zero?
+      each { |x| return true if !x.nil? and x != false }
+      return false
+    end
 
-    !my_all? { |x| !yield(x) }
+    if type.length == 1
+      checker = origin.my_select { |x| x =~ type[0] } if type[0].instance_of?(Regexp)
+      checker = origin.my_select { |x| x.is_a?(type[0]) } unless type[0].instance_of?(Regexp)
+      checker.empty? ? (return false) : (return true)
+    end
+
+    return true unless all?(*type) { |x| !yield(x) }
+
+    false
   end
+
+  # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
 
   def my_none?
     return to_enum(_method_) unless block_given?
