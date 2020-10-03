@@ -9,7 +9,11 @@ module Enumerable
       yield(array[i])
       i += 1
     end
-    array
+    if Range.new(array.first, array.last) == self
+      self
+    else
+      array
+    end
   end
 
   def my_each_with_index
