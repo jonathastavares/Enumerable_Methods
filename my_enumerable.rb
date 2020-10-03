@@ -25,7 +25,11 @@ module Enumerable
       yield(array[i], i)
       i += 1
     end
-    array
+    if Range.new(array.first, array.last) == self
+      self
+    else
+      array
+    end
   end
 
   def my_select
