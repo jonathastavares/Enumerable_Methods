@@ -135,8 +135,8 @@ module Enumerable
     origin = to_a
     if !block_given? && arg.length == 1 && origin != []
       number = origin[0]
-      origin.my_each do |item|
-        number = number.send(arg[0], item)
+      origin.my_each do |item, i|
+        number = number.send(arg[0], item) if i.positive?
       end
       return number
     end
@@ -159,8 +159,8 @@ module Enumerable
 
     if block_given? && arg.length.zero? && origin != []
       number = origin[0]
-      origin.my_each do |item|
-        number = yield(number, item)
+      origin.my_each_with_index do |item, i|
+        number = yield(number, item) if i.positive?
       end
     end
     number
