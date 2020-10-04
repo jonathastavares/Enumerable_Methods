@@ -102,6 +102,9 @@ module Enumerable
 
   def my_count(argument = nil)
     origin = to_a
+
+    return origin.length if !block_given? and !argument
+
     if argument
       count = origin.my_select { |x| x == argument }
       return count.length
