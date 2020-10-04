@@ -86,7 +86,7 @@ module Enumerable
     return true if origin == []
 
     if !block_given? and type.length.zero?
-      return true if origin.include?(nil) || origin.include?(false)
+      return true if origin.my_all? { |x| x.nil? || x == false }
 
       return false
     end
