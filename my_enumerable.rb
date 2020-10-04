@@ -76,7 +76,7 @@ module Enumerable
       checker.empty? ? (return false) : (return true)
     end
 
-    return true unless all?(*type) { |x| !yield(x) }
+    return true unless all? { |x| !yield(x) }
 
     false
   end
@@ -93,11 +93,11 @@ module Enumerable
 
     if type.length == 1
       checker = origin.my_select { |x| x =~ type[0] } if type[0].instance_of?(Regexp)
-      checker = origin.my_select { |x| x.is_a?(type[0]) } unless type[0].instance_of?(Regexp)
+      checker = origin.my_select { |x| x == type[0] } unless type[0].instance_of?(Regexp)
       checker.empty? ? (return true) : (return false)
     end
 
-    my_any?(*type) { |x| !yield(x) }
+    !my_any? { |x| yield(x) }
   end
 
   def my_count(argument = nil)
