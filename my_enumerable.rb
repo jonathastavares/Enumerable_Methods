@@ -9,7 +9,7 @@ module Enumerable
       yield(array[i])
       i += 1
     end
-    if Range.new(array.first, array.last) == self
+    if array.is_a?(Numeric) && Range.new(array.first, array.last) == self
       self
     else
       array
