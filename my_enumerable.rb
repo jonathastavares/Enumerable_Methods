@@ -135,10 +135,10 @@ module Enumerable
 
   def my_inject(*arg)
     origin = to_a
-    if !block_given? && arg.length == 1 && origin != [] && arg[0].is_a(Symbol)
+    if !block_given? && arg.length == 1 && origin != [] && arg[0].is_a?(Symbol)
       number = origin[0]
-      origin.my_each do |item, i|
-        number = number.send(arg[0], item)
+      origin.my_each_with_index do |item, i|
+        number = number.send(arg[0], item) if i.positive?
       end
       return number
     end
