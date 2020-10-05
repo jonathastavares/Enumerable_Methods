@@ -180,8 +180,3 @@ def multiply_els(array)
   array.my_inject { |result, item| result * item }
 end
 # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/ModuleLength
-block = proc { |num| num < 4 }
-range = Range.new(5, 50)
-print range.my_each(&block)
-print "\n"
-print range.each(&block)
