@@ -52,7 +52,8 @@ module Enumerable
 
     if type.length == 1
       checker = origin.my_select { |x| x =~ type[0] } if type[0].instance_of?(Regexp)
-      checker = origin.my_select { |x| x == type[0] } unless type[0].instance_of?(Regexp)
+      checker = origin.my_select { |x| x.is_a?(type[0]) } if type[0].is_a?(Class)
+      checker = origin.my_select { |x| x == type[0] } unless type[0].instance_of?(Regexp) || type[0].is_a?(Class)
 
       checker.length < origin.length ? (return false) : (return true)
     end
