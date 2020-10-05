@@ -5,11 +5,13 @@ module Enumerable
 
     array = to_a
     i = 0
+    numeric = true
     until i == array.length
+      numeric = false unless array[i].is_a?(Numeric)
       yield(array[i])
       i += 1
     end
-    if array.is_a?(Numeric) && Range.new(array.first, array.last) == self
+    if numeric && Range.new(array.first, array.last) == self
       self
     else
       array
@@ -21,11 +23,13 @@ module Enumerable
 
     array = to_a
     i = 0
+    numeric = true
     until i == array.length
+      numeric = false unless array[i].is_a?(Numeric)
       yield(array[i], i)
       i += 1
     end
-    if Range.new(array.first, array.last) == self
+    if numeric && Range.new(array.first, array.last) == self
       self
     else
       array
@@ -176,3 +180,8 @@ def multiply_els(array)
   array.my_inject { |result, item| result * item }
 end
 # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/ModuleLength
+block = proc { |num| num < 4 }
+range = Range.new(5, 50)
+print range.my_each(&block)
+print "\n"
+print range.each(&block)
