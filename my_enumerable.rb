@@ -167,9 +167,9 @@ module Enumerable
     end
     number
   end
+end
 
-  def multiply_els(array)
-    array.my_inject { |result, item| result * item }
-  end
+def multiply_els(array)
+  array.my_inject { |result, item| result * item }
 end
 # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/ModuleLength
