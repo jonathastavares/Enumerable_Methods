@@ -151,6 +151,8 @@ module Enumerable
       return number
     end
 
+    yield 1 unless block_given?
+
     if block_given? && arg.length == 1 && origin != []
       number = arg[0]
       origin.my_each do |item|
