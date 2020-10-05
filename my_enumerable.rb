@@ -135,9 +135,9 @@ module Enumerable
 
   def my_inject(*arg)
     origin = to_a
-    if !block_given? && arg.length == 1 && origin != []
+    if !block_given? && arg.length == 1 && origin != [] && arg[0].is_a?(Symbol)
       number = origin[0]
-      origin.my_each do |item, i|
+      origin.my_each_with_index do |item, i|
         number = number.send(arg[0], item) if i.positive?
       end
       return number
@@ -150,6 +150,8 @@ module Enumerable
       end
       return number
     end
+
+    yield 1 unless block_given?
 
     if block_given? && arg.length == 1 && origin != []
       number = arg[0]
@@ -167,9 +169,9 @@ module Enumerable
     end
     number
   end
+end
 
-  def multiply_els(array)
-    array.my_inject { |result, item| result * item }
-  end
+def multiply_els(array)
+  array.my_inject { |result, item| result * item }
 end
 # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/ModuleLength
