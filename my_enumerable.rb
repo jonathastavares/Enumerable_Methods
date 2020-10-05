@@ -9,7 +9,7 @@ module Enumerable
       yield(array[i])
       i += 1
     end
-    if (array.is_a?(Numeric) || array.is_a?(String)) && Range.new(array.first, array.last) == self
+    if Range.new(array.first, array.last) == self
       self
     else
       array
@@ -25,7 +25,7 @@ module Enumerable
       yield(array[i], i)
       i += 1
     end
-    if (array.is_a?(Numeric) || array.is_a?(String)) && Range.new(array.first, array.last) == self
+    if Range.new(array.first, array.last) == self
       self
     else
       array
