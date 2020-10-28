@@ -176,3 +176,5 @@ def multiply_els(array)
   array.my_inject { |result, item| result * item }
 end
 # rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/ModuleLength
+p [1, 2, 3, 'asd'].none?(5)
+p [1, 2, 3, 'asd'].my_none?(5)
