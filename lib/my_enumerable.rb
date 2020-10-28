@@ -1,4 +1,3 @@
-#!/usr/lib/env ruby
 # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/ModuleLength
 module Enumerable
   def my_each
